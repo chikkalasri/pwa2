@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+
+  </body>
+</html>
+<script>
+  //browser compatability
+  var idb = window.indexedDB || window.mozIndexedDB || window.msIndexedDB|| window.webkitIndexedDB;
+  //creating a database
+  var open = idb.open("Resume bulider",1);
+  open.onupgradeneeded = function(e) {
+    var request = e.target.result;
+    request.createObjectStore("form_data",{keyPath:"id",autoIncrement:true});
+  }
+    open.onerror= function(e) {
+      console.log("indexedDB error");
+    }
+  open.onsuccess=function (e) {
+    var request = e.target.result;
+    var transaction = request.transaction("form_data","readwrite");
+    var storeDB =transaction.objectStore("form_data");
+    var finalData = storeDB.getAll();
+    finalData.onsuccess=function(event){
+      console.log(event.target.result);
+      display(event.target.result);
+    }
+</script>
